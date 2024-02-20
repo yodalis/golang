@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
 	// isso é necessário pq a linguagem n escolhe qual driver você vai user
@@ -36,17 +37,22 @@ func main() {
 	defer db.Close()
 
 	product := NewProduct("Notebook", 2000)
-
 	err = insertProduct(db, product)
-
 	if err != nil {
 		panic(err)
 	}
+
 	product.Price = 3000
 	err = updateProduct(db, product)
 	if err != nil {
 		panic(err)
 	}
+
+	p, err := selectOneProduct(db, product.ID)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Product: %v, possui o preço de %.2f", p.Name, p.Price)
 }
 
 func insertProduct(db *sql.DB, product *Product) error {
@@ -77,4 +83,22 @@ func updateProduct(db *sql.DB, product *Product) error {
 		return err
 	}
 	return nil
+}
+
+func selectOneProduct(db *sql.DB, id string) (*Product, error) {
+	stmt, err := db.Prepare("select id, name, price from products where id = ?")
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	var p Product
+	err = stmt.QueryRow(id).Scan(&p.ID, &p.Name, &p.Price)
+	//Query Row busca apenas uma linha
+	// Scan vai olhar todas as colunas, encontrar as correspondentes e então preencher as colunas
+	// do p com os valores encontrados correspondentes
+	if err != nil {
+		return nil, err
+	}
+	return &p, nil
 }
