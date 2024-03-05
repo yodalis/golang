@@ -11,22 +11,23 @@ import (
 	"time"
 )
 
-const timeout = 300 * time.Millisecond
+var (
+	clientTimeout = 300 * time.Millisecond
+	apiUrl        = "http://localhost:8080/cotacao"
+)
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	ctx, cancel := context.WithTimeout(context.Background(), clientTimeout)
 	defer cancel()
+
 	select {
 	case <-ctx.Done():
-		err := ctx.Err()
-		if err == context.DeadlineExceeded {
-			log.Fatal("Timeout client!")
-		} else {
-			log.Fatal("Error: ", err)
-		}
+		log.Println("Timeout client")
+		return
+	default:
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "http://localhost:8080/cotacao", nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, apiUrl, nil)
 	if err != nil {
 		panic(err)
 	}

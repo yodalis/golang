@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -14,9 +13,9 @@ import (
 )
 
 const (
-	apiUrl     = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
-	dbTimeout  = 10 * time.Millisecond
-	reqTimeout = 200 * time.Millisecond
+	apiUrlRequest = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
+	dbTimeout     = 10 * time.Millisecond
+	reqTimeout    = 200 * time.Millisecond
 )
 
 type ExchangeRateResponse struct {
@@ -35,17 +34,16 @@ func main() {
 func fetchExchangeRate() (*ExchangeRateResponse, error) {
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, reqTimeout)
+	defer cancel()
+
 	select {
 	case <-ctx.Done():
-		err := ctx.Err()
-		if err == context.DeadlineExceeded {
-			log.Fatal("Timeout server!")
-		} else {
-			log.Fatal("Error: ", err)
-		}
+		log.Println("Timeout Request!")
+		return nil, ctx.Err()
+	default:
 	}
-	defer cancel()
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, apiUrl, nil)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, apiUrlRequest, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -73,16 +71,14 @@ func fetchExchangeRate() (*ExchangeRateResponse, error) {
 func insertDataDB(db *sql.DB, currencyResp *ExchangeRateResponse) error {
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, dbTimeout)
+	defer cancel()
+
 	select {
 	case <-ctx.Done():
-		err := ctx.Err()
-		if err == context.DeadlineExceeded {
-			log.Fatal("Timeout server!")
-		} else {
-			log.Fatal("Error: ", err)
-		}
+		log.Println("Timeout database")
+		return ctx.Err()
+	default:
 	}
-	defer cancel()
 
 	stmt, err := db.PrepareContext(ctx, "INSERT INTO currency_data (bid) VALUES (?)")
 	if err != nil {
@@ -130,8 +126,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-
-	fmt.Println("final", currencyResp.USDBRL.Bid)
 
 	json.NewEncoder(w).Encode(currencyResp.USDBRL.Bid)
 }
