@@ -92,18 +92,6 @@ func insertDataDB(db *sql.DB, currencyResp *ExchangeRateResponse) error {
 		return err
 	}
 
-	// select {
-	// case <-time.After(dbTimeout):
-	// 	fmt.Println("Operação demorou mais que 10ms")
-	// case <-ctx.Done():
-	// 	err := ctx.Err()
-	// 	if err == context.DeadlineExceeded {
-	// 		log.Fatal("Timeout server!")
-	// 	} else {
-	// 		log.Fatal("Error: ", err)
-	// 	}
-	// }
-
 	return nil
 }
 
