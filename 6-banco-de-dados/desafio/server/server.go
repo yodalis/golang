@@ -26,7 +26,7 @@ type ExchangeRate struct {
 	Bid string `json:"bid"`
 }
 
-func fetchExchangeRate() (*ExchangeRateResponse, error) {
+func FetchExchangeRate() (*ExchangeRateResponse, error) {
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, reqTimeout)
 	defer cancel()
@@ -63,7 +63,7 @@ func fetchExchangeRate() (*ExchangeRateResponse, error) {
 	return &bodyJson, nil
 }
 
-func insertDataDB(db *sql.DB, currencyResp *ExchangeRateResponse) error {
+func InsertDataDB(db *sql.DB, currencyResp *ExchangeRateResponse) error {
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, dbTimeout)
 	defer cancel()
@@ -88,27 +88,4 @@ func insertDataDB(db *sql.DB, currencyResp *ExchangeRateResponse) error {
 	}
 
 	return nil
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	currencyResp, err := fetchExchangeRate()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/goexpert")
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-
-	err = insertDataDB(db, currencyResp)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-
-	json.NewEncoder(w).Encode(currencyResp.USDBRL.Bid)
 }
