@@ -1,4 +1,4 @@
-module github.com/yodalis/golang/tree/main/6-banco-de-dados/desafio/server
+module github.com/yodalis/golang/6-banco-de-dados/desafio/server
 
 go 1.21.6
 
