@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"context"
@@ -24,11 +24,6 @@ type ExchangeRateResponse struct {
 
 type ExchangeRate struct {
 	Bid string `json:"bid"`
-}
-
-func main() {
-	http.HandleFunc("/cotacao", handler)
-	http.ListenAndServe(":8080", nil)
 }
 
 func fetchExchangeRate() (*ExchangeRateResponse, error) {
