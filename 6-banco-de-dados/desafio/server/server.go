@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 const (
@@ -68,6 +68,20 @@ func fetchExchangeRate() (*ExchangeRateResponse, error) {
 	return &bodyJson, nil
 }
 
+func createTableDB(db *sql.DB) error {
+	sql := `CREATE TABLE currency_data (
+		id SERIAL PRIMARY KEY,
+		bid NUMERIC
+	);
+	`
+	_, err := db.Exec(sql)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func insertDataDB(db *sql.DB, currencyResp *ExchangeRateResponse) error {
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, dbTimeout)
@@ -101,11 +115,16 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/goexpert")
+	db, err := sql.Open("sqlite3", "./currency_data.db")
 	if err != nil {
 		panic(err)
 	}
 	defer db.Close()
+
+	err = createTableDB(db)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	err = insertDataDB(db, currencyResp)
 	if err != nil {
