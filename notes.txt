@@ -1,0 +1,9 @@
+Web Frameworks
+- São estruturas de software projetadas para facilitar o desenvolvimento de aplicações web. Eles fornecem um conjunto de ferramentas, bibliotecas e padrões que ajudam os desenvolvedores a criar rapidamente aplicações web robustas e escaláveis. Exemplos de web frameworks populares incluem Django (Python), Ruby on Rails (Ruby), Express (Node.js), Spring (Java), entre outros.
+
+Developer Frameworks
+- Os developer frameworks são conjuntos de ferramentas, bibliotecas e padrões que visam facilitar o desenvolvimento de software em geral, não se limitando apenas a aplicações web. Eles podem incluir funcionalidades para lidar com tarefas comuns de desenvolvimento, como manipulação de arquivos, comunicação de rede, testes automatizados, entre outros. Exemplos de developer frameworks incluem o .NET Framework (C#), o framework padrão do Java, o framework Flask (Python), entre outros. E a principal diferença deles para um Web Framework, é que eles possuem a maneira deles de trabalhar, é como se fosse uma maneira totalmente (ou as vezes não muito) de programar, do que se você programasse de uma forma pura.
+
+Roteadores
+
+- Roteador é uma ferramenta que permite direcionar requisições HTTP para funções ou handlers específicos com base em critérios como o método HTTP e o caminho da URL requisitada. Em Go, pacotes populares como "gorilla/mux" e "httprouter", "chi" são frequentemente utilizados para implementar roteadores em aplicações web. Esses roteadores ajudam a organizar e gerenciar as rotas da aplicação de forma eficiente, facilitando a criação de APIs RESTful e outros serviços web. Eles podem facilitar em termos de poder adicionar variaveis nas criações das rotas, regex, e personalizar a sua maneira, sendo mais inteligente que o roteador original do Go.
