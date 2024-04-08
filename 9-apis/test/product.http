@@ -7,8 +7,9 @@ Content-Type: application/json
 }
 
 ### 
+# O bearer indica o token que será usado nessa req para o Authorization
 GET http://localhost:8000/products HTTP/1.1
-Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI1MjE4MTAsInN1YiI6IjdjM2MyNDczLWRhNTItNDFkYy05MjdjLWI4MWUwZmExZmNkMCJ9.G9zhfvgyHCsd65W-6-7xL2ieNKJvFTGztLSbXGXcjNQ
 
 ###
 GET http://localhost:8000/products/ad09d812-e1b8-44a4-85fa-aeea880c3302 HTTP/1.1
