@@ -11,8 +11,8 @@ import (
 
 func main() {
 	apiViaCep := api.NewViaCEP()
-	// brasilCep := api.NewBrasilCep()
-	addressHandler := handlers.NewAddressHandler(apiViaCep)
+	brasilCep := api.NewBrasilCep()
+	addressHandler := handlers.NewAddressHandler(apiViaCep, brasilCep)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
