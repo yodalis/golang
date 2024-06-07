@@ -1,0 +1,40 @@
+type Category {
+  id: ID! #o ! indica que o dado é obrigatório
+  name: String!
+  description: String
+  courses: [Course!]! # array de cursos obrigatório e não pode ser nulo
+}
+
+type Course {
+  id: ID!
+  name: String!
+  descriptio: String
+  category: Category!
+}
+
+# inputs: ajudam a fazer as entradas de dados
+input NewCategory {
+  name: String!
+  description: String
+}
+
+input NewCourse{
+  name: String!
+  description: String
+  categoryId: ID!
+}
+
+# é possível realizar consultas com graphql - exemplo
+# Mutation: quando você realiza uma alteração nos dados
+
+type Query {
+  categories: [Category!]!
+  courses: [Course!]!
+}
+
+# Mutation para criar uma nova categoria
+# Mutation para criar um novo curso
+type Mutation {
+  createCategory(input: NewCategory): Category! #função que cria uma nova categoria, recebe um input do tipo NewCategory e devolve um dado do tipo Category não nulo
+  createCourse(input: NewCourse): Course! #mesma coisa aqui
+}
