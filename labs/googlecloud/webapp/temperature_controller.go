@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"regexp"
 
-	"github.com/yodalis/golang/labs/googlecloud/internal/temperature"
+	"github.com/yodalis/labs/googlecloud/internal/temperature"
 )
 
 type Res struct {
