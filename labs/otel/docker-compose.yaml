@@ -1,0 +1,25 @@
+version: '3'
+services:
+  zipkin-all-in-one:
+      image: openzipkin/zipkin:latest
+      restart: always
+      ports:
+      - "9411:9411"
+  goapp:
+    container_name: goapp
+    image: golang:latest
+    volumes: 
+      - ./cep:/app
+    working_dir: /app
+    ports:
+      - "8080:8080"
+    command: ["go", "run", "main.go"]
+  goapp2:
+    container_name: goapp2
+    image: golang:latest
+    volumes: 
+      - ./weather:/app
+    working_dir: /app
+    ports:
+      - "9090:9090"
+    command: ["go", "run", "main.go"]
