@@ -1,0 +1,24 @@
+version: '3'
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+  app:
+    container_name: app
+    working_dir: /app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - IP_REQUEST_LIMIT=5
+      - TOKEN_REQUEST_LIMIT=4
+      - BLOCK_TIME_SECONDS=30
+    command: ["go", "run", "main.go"]
+
