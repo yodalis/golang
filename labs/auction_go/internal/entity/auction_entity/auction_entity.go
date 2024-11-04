@@ -53,9 +53,14 @@ const (
 )
 
 func (au *Auction) Validate() *internal_error.InternalError {
-	if len(au.ProductName) <= 1 || len(au.Category) <= 2 || len(au.Description) <= 10 && (au.Condition != New || au.Condition != Used || au.Condition != Refurbished) {
-		return internal_error.NewBadRequestError("Invalid auction object")
+	if len(au.ProductName) <= 1 ||
+		len(au.Category) <= 2 ||
+		len(au.Description) <= 10 && (au.Condition != New &&
+			au.Condition != Refurbished &&
+			au.Condition != Used) {
+		return internal_error.NewBadRequestError("invalid auction object")
 	}
+
 	return nil
 }
 

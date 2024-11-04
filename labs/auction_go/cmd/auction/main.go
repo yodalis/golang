@@ -36,6 +36,8 @@ func main() {
 	router := gin.Default()
 	userController, bidController, auctionsController := initDependencies(db)
 
+	checkExpiredAuctions(ctx, db)
+
 	router.GET("/auctions", auctionsController.FindAuctions)
 	router.GET("/auctions/:auctionId", auctionsController.FindAuctionById)
 	router.POST("/auctions", auctionsController.CreateAuction)
@@ -45,6 +47,11 @@ func main() {
 	router.GET("/user/:userId", userController.FindUserById)
 
 	router.Run(":8080")
+}
+
+func checkExpiredAuctions(ctx context.Context, db *mongo.Database) {
+	auctionRepository := auction.NewAuctionRepository(db)
+	go auctionRepository.StartAuctionExpirationChecker(ctx)
 }
 
 func initDependencies(db *mongo.Database) (userController *user_controller.UserController, bidController *bid_controller.BidController, auctionController *auction_controller.AuctionController) {

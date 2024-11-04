@@ -9,7 +9,7 @@ import (
 	"github.com/yodalis/golang/labs/auction_go/config/rest_err"
 )
 
-func (b *BidController) FindBidByAuctionId(c *gin.Context) {
+func (u *BidController) FindBidByAuctionId(c *gin.Context) {
 	auctionId := c.Param("auctionId")
 
 	if err := uuid.Validate(auctionId); err != nil {
@@ -22,7 +22,7 @@ func (b *BidController) FindBidByAuctionId(c *gin.Context) {
 		return
 	}
 
-	bidOutputList, err := b.bidUseCase.FindBidByAuctionId(context.Background(), auctionId)
+	bidOutputList, err := u.bidUseCase.FindBidByAuctionId(context.Background(), auctionId)
 	if err != nil {
 		errRest := rest_err.ConvertError(err)
 		c.JSON(errRest.Code, errRest)

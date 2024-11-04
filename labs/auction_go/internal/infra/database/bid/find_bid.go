@@ -59,5 +59,3 @@ func (br *BidRepository) FindWinningBidByAuctionId(ctx context.Context, auctionI
 		Timestamp: time.Unix(bidEntityMongo.Timestamp, 0),
 	}, nil
 }
-
-// TODO: Colocar erros em constantes

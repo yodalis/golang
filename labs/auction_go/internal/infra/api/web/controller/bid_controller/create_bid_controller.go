@@ -30,7 +30,8 @@ func (u *BidController) CreateBid(c *gin.Context) {
 		return
 	}
 
-	if err := u.bidUseCase.CreateBid(context.Background(), bidInputDTO); err != nil {
+	err := u.bidUseCase.CreateBid(context.Background(), bidInputDTO)
+	if err != nil {
 		restErr := rest_err.ConvertError(err)
 
 		c.JSON(restErr.Code, restErr)
